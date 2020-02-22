@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>KnockoutJs</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.0/knockout-min.js"></script>
+</head>
+<body>
+<ul data-bind="foreach: list">
+    <li>
+        <input type="text" data-bind="value: name">
+    </li>
+</ul>
+
+<button data-bind="click: submit" style="margin-top: 50px;">提交</button>
+
+<script>
+    var peoples = [
+        {name: '张三'},
+        {name: '李四'}
+    ];
+
+    //人物对象
+    var people = function (name) {
+        var self = this;
+        self.name = ko.observable(name).extend({
+            required: {
+                params: true,
+                message: '菜单名称必填'
+            },
+            maxLength: {
+                params: 10,
+                message: '菜单名称最大长度为10'
+            }
+        });
+    };
+
+    var testViewModel = function() {
+        var self = this;
+        self.list = ko.observableArray([]);
+
+        peoples.forEach(function (item, i) {
+            self.list.push(new people(item.name));
+        });
+
+        self.submit = function () {
+            console.log(self.list());
+        }
+    };
+
+    var model = new testViewModel();
+
+    ko.applyBindings(model);
+</script>
+</body>
+</html>

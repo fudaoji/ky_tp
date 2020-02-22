@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>编辑-<?php echo $blog['title'];?></title>
+    <style>
+        .wrapper{
+            padding: 30px 100px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="wrapper">
+    <div>
+        <form action="<?php echo url('edit')?>" method="post">
+            <input type="hidden" name="id" value="<?php echo $blog['id'];?>">
+            <div>
+                <input type="text" name="title" placeholder="请输入标题" value="<?php echo $blog['title'];?>">
+            </div>
+            <div>
+                <textarea name="content" cols="30" rows="10" placeholder="请输入内容"><?php echo $blog['content'];?></textarea>
+            </div>
+            <div>
+                <button type="submit">保存</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

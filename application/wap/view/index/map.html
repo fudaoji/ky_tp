@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>1.5. 标注</title>
+    <script src="http://api.shipxy.com/h5/api/plugins/jquery/jquery.min.js"></script>
+    <script src="http://api.shipxy.com/h5/api/?v=3.0&k=1F6D701272402D1E7D8D316CCE519123"></script>
+    <style>
+        .my-map {
+            position: absolute;
+            left: 0px;
+            top: 0px;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            outline: none;
+            background-color: #A3CCFF;
+        }
+
+        .div_btn {
+            position: relative;
+            top: 10px;
+            left: 80px;
+            z-index: 888;
+        }
+
+        .div_btn input[type="button"] {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div id="map" class="my-map"></div>
+<script>
+    // 创建地图示例
+    var _map = new ShipxyAPI.Map("map", {
+        ak: "1F6D701272402D1E7D8D316CCE519123",
+        zoom: 10,
+        centerPoint: [24.511800, 118.145770]
+    });
+    //
+    var latlng = ShipxyAPI.latLng(24.511800, 118.145770);
+
+    var mm;
+    // 添加标记
+    setTimeout(function () {
+        console.log(latlng);
+        mm = ShipxyAPI.marker(latlng).addTo(_map);
+    }, 2000);
+
+</script>
+</body>
+</html>

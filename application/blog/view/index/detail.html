@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><?php echo $blog['title'];?></title>
+    <style>
+        .wrapper{
+            padding: 30px 100px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="wrapper">
+    <article style="margin: 30px auto;">
+        <h2 style="text-align: center;"><?php echo $blog['title'];?></h2>
+        <div><?php echo $blog['content'];?></div>
+    </article>
+    <hr>
+    <div class="comment-list">
+        <h4>大家评论：</h4>
+        <ul>
+            <?php foreach($comments as $comment):?>
+            <li>
+                <p>
+                    <?php echo $comment['content'] ;?>
+                    <span style="display: inline-block;margin-left: 100px;">|</span>
+                    <a href="<?php echo url('commentDelPost', ['id' => $comment['id'], 'blog_id' => $blog['id']]);?>">删除</a>
+                </p>
+
+            </li>
+            <?php endforeach;?>
+        </ul>
+    </div>
+    <hr>
+    <div>
+        <h4>我说：</h4>
+        <form action="<?php echo url('commentPost')?>" method="post">
+            <input type="hidden" name="blog_id" value="<?php echo $blog['id'];?>">
+            <div>
+                <input type="text" name="author" placeholder="请输入姓名">
+            </div>
+            <div>
+                <input type="text" name="email" placeholder="请输入邮箱">
+            </div>
+            <div>
+                <textarea name="content" cols="30" rows="10" placeholder="请输入内容"></textarea>
+            </div>
+            <div>
+                <button type="submit">提交</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

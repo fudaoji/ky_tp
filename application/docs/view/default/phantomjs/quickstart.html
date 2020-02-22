@@ -1,0 +1,164 @@
+{extend name="layout:phantomjs:base" /}
+
+{block name="content"}
+<div class="shift">
+    <div class="shift__down">
+        <div class="grid navigator">
+            <div class="grid_9 push_3">
+                <div class="post">
+                    <h1>快速上手</h1>
+                    <p>以下介绍是假定您已安装了PhantomJS，并将其执行文件所在路径写入到系统执行PATH中。</p>
+                    <p>
+                        本页展示的代码也可在以下地方找到：
+                        <a href="http://phantomjs.org/examples/">各种例子</a> 包含 PhantomJS. 同时你也可以查看Phantomjs各种应用的例子
+                        <a href="http://phantomjs.org/page-automation.html">页面自动化</a>, <a href="http://phantomjs.org/network-monitoring.html">网络监测</a>,
+                        <a href="http://phantomjs.org/screen-capture.html">网页截屏</a>, 以及 <a href="http://phantomjs.org/headless-testing.html">无头测试</a>.
+                    </p>
+                    <h2 id="hello-world">Hello, World!</h2>
+                    <p>新建一个text文件并写入下列内容:</p>
+                    <div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Hello, world!'</span><span class="p">);</span>
+<span class="nx">phantom</span><span class="p">.</span><span class="nx">exit</span><span class="p">();</span>
+</code></pre>
+                    </div>
+
+                    <p>将其另存为<code class="highlighter-rouge">hello.js</code>， 然后在命令行窗口(command line)中执行此文件，而不是在控制台中(REPL).</p>
+                    <p>REPL是一个简单的交互式计算机编程环境。 <a target="_blank" href="http://phantomjs.org/repl.html">点此</a>可详细了解REPL。 同样地, REPL是一个可执行的phantomjs.exe文件而不是 command line.</p>
+                    <p>在command line中输入:</p>
+
+                    <div class="language-bash highlighter-rouge"><pre class="highlight"><code>phantomjs hello.js
+</code></pre>
+                    </div>
+
+                    <p>输出结果为:</p>
+                    <blockquote>
+                        <p>Hello, world!</p>
+                    </blockquote>
+
+                    <p>In the first line, <code class="highlighter-rouge">console.log</code> will print the passed string to the terminal. In the second line, <code class="highlighter-rouge">phantom.exit</code> terminates the execution.</p>
+
+                    <p>It is <strong>very important</strong> to call <code class="highlighter-rouge">phantom.exit</code> at some point in the script, otherwise PhantomJS will not be terminated at all.</p>
+
+                    <h2 id="page-loading">Page Loading</h2>
+
+                    <p>A web page can be loaded, analyzed, and rendered by creating a web page object.</p>
+
+                    <p>The following script demonstrates the simplest use of page object. It loads example.com and then saves it as an image, <code class="highlighter-rouge">example.png</code> in the same directory the script was run in.</p>
+
+                    <div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">page</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'webpage'</span><span class="p">).</span><span class="nx">create</span><span class="p">();</span>
+<span class="nx">page</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="s1">'http://example.com'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">status</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Status: "</span> <span class="o">+</span> <span class="nx">status</span><span class="p">);</span>
+  <span class="k">if</span><span class="p">(</span><span class="nx">status</span> <span class="o">===</span> <span class="s2">"success"</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">page</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">'example.png'</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="nx">phantom</span><span class="p">.</span><span class="nx">exit</span><span class="p">();</span>
+<span class="p">});</span>
+</code></pre>
+                    </div>
+
+                    <p>Because of its rendering features, PhantomJS can be used to <a href="http://phantomjs.org/screen-capture.html">capture web pages</a>, essentially taking a screenshot of the contents.</p>
+
+                    <p>The following <code class="highlighter-rouge">loadspeed.js</code> script loads a specified URL (do not forget the http protocol) and measures the time it takes to load it.</p>
+
+                    <div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">page</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'webpage'</span><span class="p">).</span><span class="nx">create</span><span class="p">(),</span>
+  <span class="nx">system</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'system'</span><span class="p">),</span>
+  <span class="nx">t</span><span class="p">,</span> <span class="nx">address</span><span class="p">;</span>
+
+<span class="k">if</span> <span class="p">(</span><span class="nx">system</span><span class="p">.</span><span class="nx">args</span><span class="p">.</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Usage: loadspeed.js &lt;some URL&gt;'</span><span class="p">);</span>
+  <span class="nx">phantom</span><span class="p">.</span><span class="nx">exit</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="nx">t</span> <span class="o">=</span> <span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">();</span>
+<span class="nx">address</span> <span class="o">=</span> <span class="nx">system</span><span class="p">.</span><span class="nx">args</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+<span class="nx">page</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="nx">address</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">status</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">status</span> <span class="o">!==</span> <span class="s1">'success'</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'FAIL to load the address'</span><span class="p">);</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="nx">t</span> <span class="o">=</span> <span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">()</span> <span class="o">-</span> <span class="nx">t</span><span class="p">;</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Loading '</span> <span class="o">+</span> <span class="nx">system</span><span class="p">.</span><span class="nx">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Loading time '</span> <span class="o">+</span> <span class="nx">t</span> <span class="o">+</span> <span class="s1">' msec'</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="nx">phantom</span><span class="p">.</span><span class="nx">exit</span><span class="p">();</span>
+<span class="p">});</span>
+</code></pre>
+                    </div>
+
+                    <p>Run the script with the command:</p>
+
+                    <div class="language-bash highlighter-rouge"><pre class="highlight"><code>phantomjs loadspeed.js http://www.google.com
+</code></pre>
+                    </div>
+
+                    <p>It outputs something like:</p>
+
+                    <blockquote>
+                        <p>Loading http://www.google.com
+                            Loading time 719 msec</p>
+                    </blockquote>
+
+                    <h2 id="code-evaluation">Code Evaluation</h2>
+
+                    <p>To evaluate JavaScript code in the context of the web page, use <code class="highlighter-rouge">evaluate()</code> function. The execution is “sandboxed”, there is no way for the code to access any JavaScript objects and variables outside its own page context. An object can be returned from <code class="highlighter-rouge">evaluate()</code>, however it is limited to simple objects and can’t contain functions or closures.</p>
+
+                    <p>Here is an example to show the title of a web page:</p>
+
+                    <div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">page</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'webpage'</span><span class="p">).</span><span class="nx">create</span><span class="p">();</span>
+<span class="nx">page</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">status</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">title</span> <span class="o">=</span> <span class="nx">page</span><span class="p">.</span><span class="nx">evaluate</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nb">document</span><span class="p">.</span><span class="nx">title</span><span class="p">;</span>
+  <span class="p">});</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Page title is '</span> <span class="o">+</span> <span class="nx">title</span><span class="p">);</span>
+  <span class="nx">phantom</span><span class="p">.</span><span class="nx">exit</span><span class="p">();</span>
+<span class="p">});</span>
+</code></pre>
+                    </div>
+
+                    <p>Any console message from a web page, including from the code inside <code class="highlighter-rouge">evaluate()</code>, will not be displayed by default. To override this behavior, use the <code class="highlighter-rouge">onConsoleMessage</code> callback. The previous example can be rewritten to:</p>
+
+                    <div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">page</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'webpage'</span><span class="p">).</span><span class="nx">create</span><span class="p">();</span>
+<span class="nx">page</span><span class="p">.</span><span class="nx">onConsoleMessage</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">msg</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Page title is '</span> <span class="o">+</span> <span class="nx">msg</span><span class="p">);</span>
+<span class="p">};</span>
+<span class="nx">page</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">status</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">page</span><span class="p">.</span><span class="nx">evaluate</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">title</span><span class="p">);</span>
+  <span class="p">});</span>
+  <span class="nx">phantom</span><span class="p">.</span><span class="nx">exit</span><span class="p">();</span>
+<span class="p">});</span>
+</code></pre>
+                    </div>
+
+                    <p>Since the script is executed as if it is running on a web browser, standard DOM scripting and CSS selectors work just fine. It makes PhantomJS suitable to carry out various <a href="http://phantomjs.org/page-automation.html">page automation tasks</a>.</p>
+
+                    <h2 id="network-requests-and-responses">Network Requests and Responses</h2>
+
+                    <p>When a page requests a resource from a remote server, both the request and the response can be tracked via <code class="highlighter-rouge">onResourceRequested</code> and <code class="highlighter-rouge">onResourceReceived</code> callback. This is demonstrated in the example <a href="https://github.com/ariya/phantomjs/blob/master/examples/netlog.js">netlog.js</a>:</p>
+
+                    <div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">page</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'webpage'</span><span class="p">).</span><span class="nx">create</span><span class="p">();</span>
+<span class="nx">page</span><span class="p">.</span><span class="nx">onResourceRequested</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">request</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Request '</span> <span class="o">+</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">request</span><span class="p">,</span> <span class="kc">undefined</span><span class="p">,</span> <span class="mi">4</span><span class="p">));</span>
+<span class="p">};</span>
+<span class="nx">page</span><span class="p">.</span><span class="nx">onResourceReceived</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Receive '</span> <span class="o">+</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">response</span><span class="p">,</span> <span class="kc">undefined</span><span class="p">,</span> <span class="mi">4</span><span class="p">));</span>
+<span class="p">};</span>
+<span class="nx">page</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="nx">url</span><span class="p">);</span>
+</code></pre>
+                    </div>
+
+                    <p>For more info on how to utilize this features for HAR export as well as YSlow-based performance analysis, see the page on <a href="http://phantomjs.org/network-monitoring.html">network monitoring</a>.</p>
+
+
+                </div>
+            </div>
+
+            {include file="layout:phantomjs:sidebar"}
+        </div>
+
+    </div>
+
+
+    {:widget('phantomjs/improvehtml', ['url' => 'https://github.com/ariya/phantomjs/edit/gh-pages/_posts/documentation/learn/2000-01-01-quick-start.md'])}
+</div>
+
+{include file="layout:phantomjs:community"}
+{/block}

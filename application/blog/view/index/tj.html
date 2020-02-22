@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>评论列表</title>
+</head>
+<body>
+
+<ul>
+    <?php foreach($list as $item):?>
+    <li>
+        <div style="margin: 10px;">
+                <a href="<?php echo url('detail', ['id' => $item['id']]);?>"><?php echo $item['type'];?></a>
+                <div style="width: 100px;display: inline-block;">&nbsp;</div>
+                <!--<a href="<?php echo url('detail', ['id' => $item['id']]);?>">查看</a> |
+                <a href="<?php echo url('edit', ['id' => $item['id']]);?>">编辑</a> |
+                <a href="<?php echo url('delpost', ['id' => $item['id']]);?>">删除</a> |
+                <a href="<?php echo url('tj', ['id' => $item['id']]);?>">日志</a> |-->
+        </div>
+    </li>
+    <?php endforeach;?>
+</ul>
+
+</body>
+</html>

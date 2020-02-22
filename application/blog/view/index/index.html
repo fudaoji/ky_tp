@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>博客列表</title>
+</head>
+<body>
+
+<ul>
+    <?php foreach($list as $blog):?>
+    <li>
+        <div style="margin: 10px;">
+                <a href="<?php echo url('detail', ['id' => $blog['id']]);?>"><?php echo $blog['title'];?></a>
+                <div style="width: 100px;display: inline-block;">&nbsp;</div>
+                <a href="<?php echo url('detail', ['id' => $blog['id']]);?>">查看</a> |
+                <a href="<?php echo url('edit', ['id' => $blog['id']]);?>">编辑</a> |
+                <a href="<?php echo url('delpost', ['id' => $blog['id']]);?>">删除</a> |
+                <a href="<?php echo url('tj', ['id' => $blog['id']]);?>">日志</a>
+        </div>
+    </li>
+    <?php endforeach;?>
+</ul>
+
+</body>
+</html>
