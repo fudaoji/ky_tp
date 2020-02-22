@@ -15,7 +15,7 @@ class Index extends Controller
     }
 
     public function index(){
-        echo "hello thinkphp";
+        dump(request()->server());
     }
 
     public function memcache(){
